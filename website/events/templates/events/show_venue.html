@@ -1,0 +1,71 @@
+﻿{% extends "events/base.html" %}
+{% block title %}Venue Page{% endblock %}
+{% block content %}
+<style>
+    body{
+        background: #FFC470;
+    }
+</style>
+
+<center>
+    <h1><strong>{{ venue }}</strong></h1>
+</center>
+<br>
+
+<div class="card border-dark mb-4">
+    <div class="card-header">
+        <strong>Venue Details</strong>
+    </div>
+    <div class="card-body">
+        <ul>
+            <li><strong>Address :</strong> {{ venue.address }}</li>
+            <li><strong>Zipcode :</strong> {{ venue.zipcode }}</li>
+            <li><strong>Owner :</strong> {{ venue_owner }}</li>
+            {% if venue.phone_number %}
+            <li><strong>Phone Number :</strong> {{ venue.phone_number }}</li>
+            {% else %}
+            <li><strong>Phone Number :</strong><span class="link-danger"> Not Available</span></li>
+            {% endif %}
+            {% if venue.web %}
+            <li><strong>Website : </strong><a href="{{ venue.web }}" class=" link-primary">{{ venue.web }}
+                </a></li>
+            {% else %}
+            <li><strong>Website :</strong><span class="link-danger"> Not Available</span></li>
+            {% endif %}
+            {% if venue.email_address %}
+            <li><strong>Email Address :</strong><span class="link-primary"> {{ venue.email_address }}</span></li>
+            {% else %}
+            <li><strong>Email Address :</strong><span class="link-danger"> Not Available</span></li>
+            {% endif %}
+            {% if events %}
+            <li><strong>Owner's Email Address :</strong><span class="link-primary"> {{ venue_owner.email }}</span></li>
+            <li><strong>Events :</strong></li>
+            <ul>
+                {% for event in events %}
+                <li><strong><a href="{% url 'show-event' event.id %}" class="link-dark">{{ event.name }}</a></strong>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <li><strong>Events :</strong><span class="link-danger"> No Events Scheduled</span></li>
+            {% endif %}
+        </ul>
+
+        {% if venue.image %}
+        <a href="{{ venue.image.url }}" class="btn btn-success">Show Venue Image</a>
+        {% endif %}
+    </div>
+
+    <div class="card-footer text-body-secondary">
+        <a href="{% url 'list-venue' %}" class="btn btn-dark me-md-2">Back to Venues List</a>
+        {% if user.is_authenticated %}
+        {% if user.id == venue.owner %}
+        <a href="{% url 'update-venue' venue.id %}" class="btn btn-success me-md-2">Update Venue</a>
+        <a href="{% url 'delete-venue' venue.id %}" class="btn btn-danger  me-md-2">Delete Venue</a>
+        {% endif %}
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

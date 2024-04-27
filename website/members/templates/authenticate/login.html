@@ -1,0 +1,47 @@
+﻿{% extends "events/base.html" %}
+{% block title %}Login Page{% endblock %}
+{% block content %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Yanone+Kaffeesatz&display=swap" rel="stylesheet">
+
+<style>
+    body{
+        background: #FFC470;
+    }
+    .title, .form-label{
+        font-family: "Playfair Display", serif;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+    }
+</style>
+
+<div class="shadow p-4 mb-5 bg-body rounded">
+
+    <center>
+        <h1 class="title">Login</h1>
+    </center>
+    <br>
+    <form action="" method="POST">
+        {% csrf_token %}
+
+
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password">
+        </div>
+
+
+
+        <input type="submit" value="Submit" class="btn btn-dark me-md-2">
+    </form>
+
+</div>
+
+{% endblock %}

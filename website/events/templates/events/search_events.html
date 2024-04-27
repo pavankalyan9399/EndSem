@@ -1,0 +1,49 @@
+﻿{% extends "events/base.html" %}
+{% block title %}Search Page{% endblock %}
+{% block content %}
+
+<style>
+    body{
+        background: #FFC470;
+    }
+</style>
+
+{% if searched %}
+<center>
+    <h1>Events</h1>
+</center>
+<br>
+<table class="table table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+        <tr style="height: 3em;">
+            <td><strong><a href="{% url 'show-event' event.id %}" class="link-dark">{{ event.name }}</a></strong></td>
+            <td>{{ event.event_date }}</td>
+            {% if event.event_date|date:"Y-m-d" < datetime.date|date:"Y-m-d" %} <td class="link-danger"><b>Finished</b>
+                </td>
+                {% elif event.event_date|date:"Y-m-d" > datetime.date|date:"Y-m-d" %}
+                <td class="link-success"><b>Upcoming</b></td>
+                {% else %}
+                {% if event.event_date.time|time:"H:i:s" > datetime.time|time:"H:i:s" %} <td class="link-success">
+                    <b>Upcoming</b>
+                </td>
+                {% else %}
+                <td class="link-danger"><b>Finished</b></td>
+                {% endif %}
+                {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'list-event' %}" class="btn btn-dark me-md-2">Back to Events List</a>
+<br><br><br>
+
+{% endif %}
+{% endblock %}

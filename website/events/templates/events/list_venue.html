@@ -1,0 +1,81 @@
+﻿{% extends "events/base.html" %}
+{% block title %}Venue List Page{% endblock %}
+{% block content %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Yanone+Kaffeesatz&display=swap" rel="stylesheet">
+
+<style>
+    body{
+        background: #FFC470;
+    }
+    .title{
+        font-family: "Playfair Display", serif;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+    }
+</style>
+
+<center>
+    <h1 class="title">Venues</h1>
+</center>
+
+<br>
+
+<table class="table table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Address</th>
+            {% if user.is_authenticated %}
+            <th scope="col" style="width: 13em;"></th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for venue in venues %}
+        <tr style="height: 3em; background: white">
+            <td>
+                <strong><a href="{% url 'show-venue' venue.id %}" class="link-dark">{{ venue }}</a></strong>
+            </td>
+            <td>{{ venue.address }}</td>
+            {% if user.is_authenticated %}
+            {% if user.id == venue.owner %}
+            <td align="right"><a href="{% url 'update-venue' venue.id %}"
+                    class="btn btn-outline-dark btn-sm me-md-1">Update</a>
+                <a href="{% url 'delete-venue' venue.id %}" class="btn btn-outline-danger btn-sm me-md-1">Delete</a>
+            </td>
+            {% endif %}
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<!-- {{ venues }} <br>
+Has Previous: {{ venues.has_previous }} <br>
+Has Next: {{ venues.has_next }} <br>
+Current Page: {{ venues.number }} <br>
+No. of Pages: {{ venues.paginator.num_pages }} <br> -->
+
+<div class="d-grid gap-2 d-md-flex justify-content-md-center">
+    {% if venues.has_previous %}
+    <a href="?page=1" class="btn btn-dark me-md-2">First Page</a>
+    <a href="?page={{ venues.previous_page_number }}" class="btn btn-dark me-md-2">Previous Page</a>
+    {% else %}
+    <a href="" class="btn btn-dark me-md-2 disabled">First Page</a>
+    <a href="" class="btn btn-dark me-md-2 disabled">Previous Page</a>
+    {% endif %}
+    <a href="" class="btn btn-dark me-md-2 disabled">Page {{ venues.number }} of {{ venues.paginator.num_pages }}</a>
+    {% if venues.has_next %}
+    <a href="?page={{ venues.next_page_number }}" class="btn btn-dark me-md-2">Next Page</a>
+    <a href="?page={{ venues.paginator.num_pages }}" class="btn btn-dark me-md-2">Last Page</a>
+    {% else %}
+    <a href="" class="btn btn-dark me-md-2 disabled">Next Page</a>
+    <a href="" class="btn btn-dark me-md-2 disabled">Last Page</a>
+    {% endif %}
+</div>
+<br><br>
+
+{% endblock %}

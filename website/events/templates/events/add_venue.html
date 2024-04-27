@@ -1,0 +1,40 @@
+﻿{% extends "events/base.html" %}
+{% block title %}Add Venue Page{% endblock %}
+{% block content %}
+
+<style>
+    body{
+        background: #FFC470;
+    }
+    .title{
+        font-family: "Playfair Display", serif;
+        font-optical-sizing: auto;
+        font-weight: 600;
+        font-style: normal;
+    }
+    .outer-container{
+        background: #DD5746;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 20px 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    }
+</style>
+
+<center>
+    <h1 class="title">Add Venue To Database</h1>
+</center>
+<br>
+{% if not submitted %}
+<div class="outer-container">
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <center><input type="submit" value="Submit Venue" class="btn btn-success me-md-2">
+    <a href="{% url 'list-venue' %}" class="btn btn-dark me-md-2">Back to Venues List</a></center>
+</form>
+</div>
+{% endif %}
+{% endblock %}

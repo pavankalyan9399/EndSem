@@ -1,0 +1,34 @@
+﻿{% extends "events/base.html" %} {% block title %}Update Event Page{% endblock%} {% block content %}
+
+<style>
+  body {
+    background: #ffc470;
+  }
+  .title {
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+  }
+  .container {
+    background: #FC4100;
+    padding: 30px;
+    border-radius: 5px;
+  }
+</style>
+
+<center>
+  <h1 class="title">Update Venue - {{ venue.name }}</h1>
+</center>
+<br />
+<div class="container">
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %} {{ form.as_p }}
+    <input type="submit" value="Update Venue" class="btn btn-success me-md-2" />
+    <a href="{% url 'list-venue' %}" class="btn btn-dark me-md-2"
+      >Back to Venues List</a
+    >
+  </form>
+</div>
+
+{% endblock %}

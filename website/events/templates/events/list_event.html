@@ -1,0 +1,99 @@
+﻿{% extends "events/base.html" %}
+{% block title %}Event List Page{% endblock %}
+{% block content %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Yanone+Kaffeesatz&display=swap" rel="stylesheet">
+
+<style>
+    body{
+        background: #FFC470;
+    }
+    .title{
+        font-family: "Playfair Display", serif;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+    }
+</style>
+
+<center>
+    <h1 class="title">Events</h1>
+</center>
+
+<br>
+
+<table class="table table-hover table-bordered">
+    <thead class="table table-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Status</th>
+            {% if user.is_authenticated %}
+            <th scope="col" style="width: 13em;"></th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+        <tr style="height: 3em; background: white">
+            <td><strong><a href="{% url 'show-event' event.id %}" class="link-dark">{{ event }}</a></strong></td>
+            <td>{{ event.event_date }}</td>
+            {% if event.event_date|date:"Y-m-d" < datetime.date|date:"Y-m-d" %} <td class="link-danger"><b>Finished</b>
+                </td>
+                {% elif event.event_date|date:"Y-m-d" > datetime.date|date:"Y-m-d" %}
+                <td class="link-success"><b>Upcoming</b></td>
+                {% else %}
+                {% if event.event_date.time|time:"H:i:s" > datetime.time|time:"H:i:s" %} <td class="link-success">
+                    <b>Upcoming</b>
+                </td>
+                {% else %}
+                <td class="link-danger"><b>Finished</b></td>
+                {% endif %}
+                {% endif %}
+                {% if user.is_authenticated %}
+                {% if user == event.manager %}
+                {% if event.event_date|date:"Y-m-d" > datetime.date|date:"Y-m-d" %}
+                <td align="right"><a href="{% url 'update-event' event.id %}"
+                        class="btn btn-outline-dark btn-sm me-md-1">Update</a>
+                    <a href="{% url 'delete-event' event.id %}" class="btn btn-outline-danger btn-sm me-md-1">Delete</a>
+                </td>
+                {% elif event.event_date|date:"Y-m-d" == datetime.date|date:"Y-m-d" %}
+                {% if event.event_date.time|time:"H:i:s" > datetime.time|time:"H:i:s" %}
+                <td align="right"><a href="{% url 'update-event' event.id %}"
+                        class="btn btn-outline-dark btn-sm me-md-1">Update</a>
+                    <a href="{% url 'delete-event' event.id %}" class="btn btn-outline-danger btn-sm me-md-1">Delete</a>
+                </td>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="d-grid gap-2 d-md-flex justify-content-md-center">
+    {% if events.has_previous %}
+    <a href="?page=1" class="btn btn-dark me-md-2">First Page</a>
+    <a href="?page={{ events.previous_page_number }}" class="btn btn-dark me-md-2">Previous Page</a>
+    {% else %}
+    <a href="" class="btn btn-dark me-md-2 disabled">First Page</a>
+    <a href="" class="btn btn-dark me-md-2 disabled">Previous Page</a>
+    {% endif %}
+    <a href="" class="btn btn-dark me-md-2 disabled">Page {{ events.number }} of {{ events.paginator.num_pages }}</a>
+    {% if events.has_next %}
+    <a href="?page={{ events.next_page_number }}" class="btn btn-dark me-md-2">Next Page</a>
+    <a href="?page={{ events.paginator.num_pages }}" class="btn btn-dark me-md-2">Last Page</a>
+    {% else %}
+    <a href="" class="btn btn-dark me-md-2 disabled">Next Page</a>
+    <a href="" class="btn btn-dark me-md-2 disabled">Last Page</a>
+    {% endif %}
+</div>
+<!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="{% url 'add-event' %}" class="btn btn-dark me-md-2">Add Event</a>
+    <a href="{% url 'my-events' %}" class="btn btn-dark me-md-2">My Events</a>
+</div> -->
+<br><br>
+{% endblock %}
